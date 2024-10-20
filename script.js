@@ -11,58 +11,38 @@ let currentEmail = localStorage.getItem("currentEmail");
 // Load transactions for the logged-in user
 function loadTransactions(email) {
     const transactions = JSON.parse(localStorage.getItem(email)) || [];
-    let totalIncome = 0;
-    let totalExpense = 0;
+    let totalBalance = 0;
     transactionList.innerHTML = "";
 
     transactions.forEach(transaction => {
         const li = document.createElement("li");
-        li.className = transaction.type;
-        li.innerHTML = `${transaction.description}: $${transaction.amount.toFixed(2)} at ${transaction.time} 
+        li.className = "transaction-item";
+
+        // Displaying the type of transaction with a label
+        li.innerHTML = `${transaction.type.charAt(0).toUpperCase() + transaction.type.slice(1)}: ${transaction.description}: $${transaction.amount.toFixed(2)} 
                         <button class="remove-btn" onclick="removeTransaction('${email}', '${transaction.description}')">Remove</button>`;
         transactionList.appendChild(li);
 
-        // Calculate total income and expense
-        if (transaction.type === "income") {
-            totalIncome += transaction.amount;
-        } else {
-            totalExpense += transaction.amount;
-        }
+        totalBalance += transaction.type === "income" ? transaction.amount : -transaction.amount;
     });
 
-    const balance = totalIncome - totalExpense;
-    balanceDisplay.innerText = balance.toFixed(2);
-
-    // Update details section
-    const detailsContent = `
-        <p>Total Income: $${totalIncome.toFixed(2)}</p>
-        <p>Total Expense: $${totalExpense.toFixed(2)}</p>
-        <p>Current Balance: $${balance.toFixed(2)}</p>
-    `;
-    document.getElementById("details-content").innerHTML = detailsContent;
-    document.getElementById("details-content").style.display = "block"; // Show details
+    balanceDisplay.innerText = totalBalance.toFixed(2);
 }
 
 // Add transaction to the list and local storage
 budgetForm.onsubmit = function (e) {
-    e.preventDefault(); // Prevent page reload
+    e.preventDefault();
     const type = document.getElementById("type").value;
     const description = document.getElementById("description").value;
     const amount = parseFloat(document.getElementById("amount").value);
-    const time = document.getElementById("time").value; // Get the time input
 
-    if (!description || isNaN(amount) || !time) {
-        alert("Please fill in all fields!");
-        return;
-    }
-
-    const transaction = { type, description, amount, time }; // Create transaction object
+    const transaction = { type, description, amount };
     const transactions = JSON.parse(localStorage.getItem(currentEmail)) || [];
     transactions.push(transaction);
     localStorage.setItem(currentEmail, JSON.stringify(transactions));
 
-    loadTransactions(currentEmail); // Reload transactions
-    budgetForm.reset(); // Reset the form fields
+    loadTransactions(currentEmail);
+    budgetForm.reset();
 };
 
 // Handle login
@@ -125,7 +105,7 @@ window.onload = function () {
     } else {
         loginModal.style.display = "block";
     }
-}
+};
 
 window.addEventListener('mousemove', resetLogoutTimer);
 window.addEventListener('keydown', resetLogoutTimer);
