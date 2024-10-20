@@ -45,19 +45,24 @@ function loadTransactions(email) {
 
 // Add transaction to the list and local storage
 budgetForm.onsubmit = function (e) {
-    e.preventDefault();
+    e.preventDefault(); // Prevent page reload
     const type = document.getElementById("type").value;
     const description = document.getElementById("description").value;
     const amount = parseFloat(document.getElementById("amount").value);
     const time = document.getElementById("time").value; // Get the time input
 
-    const transaction = { type, description, amount, time }; // Include time in transaction object
+    if (!description || isNaN(amount) || !time) {
+        alert("Please fill in all fields!");
+        return;
+    }
+
+    const transaction = { type, description, amount, time }; // Create transaction object
     const transactions = JSON.parse(localStorage.getItem(currentEmail)) || [];
     transactions.push(transaction);
     localStorage.setItem(currentEmail, JSON.stringify(transactions));
 
-    loadTransactions(currentEmail);
-    budgetForm.reset();
+    loadTransactions(currentEmail); // Reload transactions
+    budgetForm.reset(); // Reset the form fields
 };
 
 // Handle login
