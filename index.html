@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Budget Tracker</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to external CSS file -->
+</head>
+<body>
+
+<div class="container" id="budget-container" style="display:none;">
+    <h1>Student Budget Tracker</h1>
+    <h2>Balance: $<span id="balance">0.00</span></h2>
+
+    <button id="logout-btn" class="btn btn-danger">Logout</button> <!-- Logout button -->
+
+    <form id="budget-form">
+        <label for="type">Type</label>
+        <select id="type" required>
+            <option value="" disabled selected>Choose</option>
+            <option value="income">Income</option>
+            <option value="expense">Expense</option>
+        </select>
+
+        <label for="description">Description</label>
+        <input type="text" id="description" placeholder="Enter description" required>
+
+        <label for="amount">Amount</label>
+        <input type="number" id="amount" placeholder="Enter amount" required>
+
+        <button type="submit">Add Transaction</button>
+    </form>
+
+    <h3>Transaction History:</h3>
+    <ul id="transaction-list"></ul>
+
+    <div id="details">
+        <h3>Details</h3>
+        <p id="details-content" style="display:none;">Your additional details will appear here.</p>
+    </div>
+</div>
+
+<!-- Email Login Modal -->
+<div id="login-modal" class="modal">
+    <div class="modal-content">
+        <h2>Login</h2>
+        <form id="login-form">
+            <label for="email">Enter your email:</label>
+            <input type="email" id="email" placeholder="you@example.com" required>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+</div>
+
+<script src="script.js"></script> <!-- Link to external JavaScript file -->
+</body>
+</html>
